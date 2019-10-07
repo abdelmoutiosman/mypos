@@ -1,6 +1,41 @@
 @extends('layouts.dashboard.app')
 @inject('model', 'App\User')
 @section('content')
+    @push('css')
+        @if (app()->getLocale() == 'ar')
+            <style>
+                .form-group{
+                    position: relative;
+                }
+                .form-group .show-pass1{
+                    position: absolute;
+                    left: 18px;
+                    top: 35px;
+                }
+                .form-group .show-pass2{
+                    position: absolute;
+                    left: 18px;
+                    top: 35px;
+                }
+            </style>
+        @else
+            <style>
+                .form-group{
+                    position: relative;
+                }
+                .form-group .show-pass1{
+                    position: absolute;
+                    right: 18px;
+                    top: 35px;
+                }
+                .form-group .show-pass2{
+                    position: absolute;
+                    right: 18px;
+                    top: 35px;
+                }
+            </style>
+        @endif
+    @endpush
 @section('page_title')
     {{__('messages.Create User')}}
 @endsection
@@ -66,7 +101,7 @@
                 <label for="permissions">{{__('messages.Permissions')}}</label>
                 <div class="nav-tabs-custom">
                     @php
-                        $models = ['users', 'categories', 'products'];
+                        $models = ['users', 'categories', 'products','clients','orders'];
                         $maps = ['create', 'read', 'update', 'delete'];
                     @endphp
                     <ul class="nav nav-tabs">

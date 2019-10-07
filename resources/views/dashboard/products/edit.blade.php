@@ -52,12 +52,14 @@
                 <label for="purchase_price">{{__('messages.purchase_price')}}</label>
                 {!! Form::number('purchase_price',null,[
                     'class'=>'form-control',
+                    'step'=>'0.01',
                 ]) !!}
             </div>
             <div class="form-group">
                 <label for="sale_price">{{__('messages.sale_price')}}</label>
                 {!! Form::number('sale_price',null,[
                     'class'=>'form-control',
+                    'step'=>'0.01',
                 ]) !!}
             </div>
             <div class="form-group">

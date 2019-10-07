@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Dashboard;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 use Image;
 
 class UserController extends Controller
@@ -110,12 +112,10 @@ class UserController extends Controller
             'last_name'=>'required',
             'email'=>'required',
             'image'=>'image',
-            'password'=>'required|confirmed',
             'permissions'=>'required|array'
         ]);
         $user=User::findOrFail($id);
         $user->syncPermissions($request->permissions);
-        $request->merge(['password' => bcrypt($request->password)]);
         $user->update($request->except('image'));
         if($request->image){
             if ($user->image != 'default.png'){
@@ -155,5 +155,28 @@ class UserController extends Controller
             'message' => 'تم الحذف بنجاح',
             'id'      => $id
         ]);
+    }
+    public function changePassword()
+    {
+        return view('dashboard.users.reset-password');
+    }
+    public function changePasswordSave(Request $request)
+    {
+        $messages = [
+            'old-password' => 'required',
+            'password' => 'required|confirmed',
+        ];
+        $this->validate($request,$messages);
+        $user = Auth::user();
+        if (Hash::check($request->input('old-password'), $user->password)) {
+            // The passwords match...
+            $user->password = bcrypt($request->input('password'));
+            $user->save();
+            flash()->success(__('messages.Edited Successfuly'));
+            return view('dashboard.users.reset-password');
+        }else{
+            flash()->error('Password Dont match');
+            return view('dashboard.users.reset-password');
+        }
     }
 }

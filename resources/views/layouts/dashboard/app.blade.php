@@ -9,7 +9,6 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="{{asset('adminlte/plugins/bootstrap/dist/css/bootstrap.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('adminlte/plugins/sweetalert/sweetalert.css')}}">
     <!-- Ionicons -->
     <link rel="stylesheet" href="{{asset('adminlte/plugins/Ionicons/css/ionicons.min.css')}}">
     <!-- Theme style -->
@@ -26,6 +25,9 @@
         <link rel="stylesheet" href="{{asset('adminlte/plugins/font-awesome/css/font-awesome.min.css')}}">
         <link rel="stylesheet" href="{{asset('adminlte/css/AdminLTE.min.css')}}">
     @endif
+    <link rel="stylesheet" type="text/css" href="{{asset('adminlte/plugins/sweetalert/sweetalert.css')}}">
+    {{--morris--}}
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/morris/morris.css') }}">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
            folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="{{asset('adminlte/css/skins/_all-skins.min.css')}}">
@@ -39,7 +41,41 @@
         .swal2-popup{
             font-size: 1.5rem !important;
         }
+        .mr-2{
+            margin-right: 5px;
+        }
+
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 5px solid #367FA9;
+            width: 60px;
+            height: 60px;
+            -webkit-animation: spin 1s linear infinite; /* Safari */
+            animation: spin 1s linear infinite;
+        }
+
+        /* Safari */
+        @-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
     </style>
+    @stack('css')
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <!-- Site wrapper -->
@@ -47,7 +83,7 @@
     <header class="main-header">
     @if(app()->getlocale() == 'ar')
         <!-- Logo -->
-            <a href="{{url(route('dashboard.index'))}}" class="logo">
+            <a href="{{url(route('dashboard.welcome'))}}" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
                 <span class="logo-mini">mypos</span>
                 <!-- logo for regular state and mobile devices -->
@@ -55,7 +91,7 @@
             </a>
     @else
         <!-- Logo -->
-            <a href="{{url(route('dashboard.index'))}}" class="logo">
+            <a href="{{url(route('dashboard.welcome'))}}" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
                 <span class="logo-mini"><b>my</b>pos</span>
                 <!-- logo for regular state and mobile devices -->
@@ -208,21 +244,24 @@
                 @endif
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu" data-widget="tree">
-                <li><a href="{{url(route('dashboard.index'))}}"><i class="fa fa-dashboard"></i> <span>{{__('messages.Dashboard')}}</span></a>
-{{--                <li><a href="{{url(route('client.index'))}}"><i class="fa fa-users"></i> <span>{{__('messages.Clients')}}</span></a>--}}
-{{--                <li><a href="{{url(route('order.index'))}}"><i class="fa fa-heart"></i> <span>{{__('messages.Orders')}}</span></a></li>--}}
-{{--                <li><a href="{{url(route('contact.index'))}}"><i class="fa fa-phone"></i> <span>{{__('messages.Contacts')}}</span></a></li>--}}
+                <li><a href="{{url(route('dashboard.welcome'))}}"><i class="fa fa-dashboard"></i> <span>{{__('messages.Dashboard')}}</span></a>
 {{--                <li><a href="{{url(route('setting.index'))}}"><i class="fa fa-cogs"></i> <span>{{__('messages.Settings')}}</span></a></li>--}}
-{{--                <li><a href="{{url('user/change-password')}}"><i class="fa fa-key"></i> <span>{{__('messages.Change Password')}}</span></a></li>--}}
                 @if(auth()->user()->hasPermission('read_categories'))
                 <li><a href="{{url(route('dashboard.categories.index'))}}"><i class="fa fa-list"></i> <span>{{__('messages.categories')}}</span></a></li>
                 @endif
                 @if(auth()->user()->hasPermission('read_products'))
                     <li><a href="{{url(route('dashboard.products.index'))}}"><i class="fa fa-list"></i> <span>{{__('messages.products')}}</span></a></li>
                 @endif
+                @if(auth()->user()->hasPermission('read_clients'))
+                    <li><a href="{{url(route('dashboard.clients.index'))}}"><i class="fa fa-users"></i> <span>{{__('messages.clients')}}</span></a></li>
+                @endif
+                @if(auth()->user()->hasPermission('read_clients'))
+                    <li><a href="{{url(route('dashboard.orders.index'))}}"><i class="fa fa-heart"></i> <span>{{__('messages.orders')}}</span></a></li>
+                @endif
                 @if(auth()->user()->hasPermission('read_users'))
                     <li><a href="{{url(route('dashboard.users.index'))}}"><i class="fa fa-users"></i> <span>{{__('messages.users')}}</span></a></li>
                 @endif
+                <li><a href="{{url('dashboard/users/change-password')}}"><i class="fa fa-key"></i> <span>{{__('messages.Change Password')}}</span></a></li>
             </ul>
         </section>
         <!-- /.sidebar -->
@@ -237,7 +276,7 @@
                 <small>@yield('small_title')</small>
             </h1>
             <ol class="breadcrumb">
-                <li><a href="{{url(route('dashboard.index'))}}"><i class="fa fa-dashboard"></i> {{__('messages.Home')}}</a></li>
+                <li><a href="{{url(route('dashboard.welcome'))}}"><i class="fa fa-dashboard"></i> {{__('messages.Home')}}</a></li>
                 <li class="active">@yield('page_title')</li>
             </ol>
         </section>
@@ -425,35 +464,37 @@
 <!-- jQuery 3 -->
 <script src="{{asset('adminlte/plugins/jquery/dist/jquery.min.js')}}"></script>
 <script src="{{asset('adminlte/plugins/jquery-confirm/jquery.confirm.min.js')}}"></script>
-<script src="{{asset('adminlte/plugins/sweetalert/sweetalert.min.js')}}"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="{{asset('adminlte/plugins/bootstrap/dist/js/bootstrap.min.js')}}"></script>
 <!-- SlimScroll -->
 <script src="{{asset('adminlte/plugins/jquery-slimscroll/jquery.slimscroll.min.js')}}"></script>
 <!-- FastClick -->
 <script src="{{asset('adminlte/plugins/fastclick/lib/fastclick.js')}}"></script>
+<!-- jquery number -->
+<script src="{{asset('adminlte/plugins/jquery-number/jquery.number.min.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('adminlte/js/adminlte.min.js')}}"></script>
-<!-- ckeditor -->
-<script src="{{asset('adminlte/plugins/ckeditor/ckeditor.js')}}"></script>
+
 <!-- AdminLTE for demo purposes -->
 <script src="{{asset('adminlte/js/demo.js')}}"></script>
+{{--sweetalert--}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+<script src="{{asset('adminlte/plugins/sweetalert/sweetalert.min.js')}}"></script>
+{{--morris --}}
+{{--<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>--}}
+<script src="{{asset('adminlte/plugins/raphael/raphael.min.js')}}"></script>
+<script src="{{ asset('adminlte/plugins/morris/morris.min.js') }}"></script>
+<!-- ckeditor -->
+<script src="{{asset('adminlte/plugins/ckeditor/ckeditor.js')}}"></script>
+<!-- printing this-->
+<script src="{{asset('adminlte/plugins/jquery-print-this/printThis.js')}}"></script>
 <script src="{{asset('js/confirm.js')}}"></script>
+<script src="{{asset('adminlte/js/custom/order.js')}}"></script>
+<script src="{{asset('adminlte/js/custom/image_preview.js')}}"></script>
 <script>
     $(document).ready(function () {
         $('.sidebar-menu').tree()
     })
-
-    $(".image").change(function() {
-        if (this.files && this.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                $('.image-preview').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(this.files[0]);
-        }
-    });
 
     CKEDITOR.config.language = "{{app()->getLocale()}}";
 </script>
