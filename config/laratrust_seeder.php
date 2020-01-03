@@ -8,6 +8,7 @@ return [
             'clients' => 'c,r,u,d',
             'orders' => 'c,r,u,d',
             'users' => 'c,r,u,d',
+            'settings' => 'u',
         ],
         'admin' => []
         ,

@@ -131,6 +131,15 @@
         "add_order"=>"اضافه طلب",
         "All rights reserved."=>"كل الحقوق محفوظة.",
         "Copyright"=>"حقوق النشر",
+        "Edit Settings"=>"تعديل الاعدادات",
+        "settings"=>"الاعدادات",
+        "about_app"=>"عن التطبيق",
+        "Facebook_url"=>"مسار الفيسبوك",
+        "Twitter_url"=>"مسار التويتر",
+        "instagram_url"=>"مسار الانستجرام",
+        "Edit Profile"=>"تعديل الملف الشخصي",
+        "Form To Edit Profile"=>"فورم تعديل الملف الشخصي",
+        "Profile"=>"الملف الشخصي",
 //        "ar"=>[
 //            'name'=>'الاسم باللغه العربيه'
 //        ],

@@ -47,9 +47,9 @@
                         <div class="form-group">
                             <button type="submit" class="btn btn-flat bg-navy"><i class="fa fa-search"></i></button>
                             @if(auth()->user()->hasPermission('create_products'))
-                            <a href="{{url(route('dashboard.products.create'))}}" class="btn btn-flat bg-navy"><i class="fa fa-plus"></i> {{__('messages.New Product')}}</a>
+                            <a href="{{url(route('dashboard.products.create'))}}" class="btn btn-primary"><i class="fa fa-plus"></i> {{__('messages.New Product')}}</a>
                             @else
-                            <a href="#" class="btn btn-flat bg-navy disabled"><i class="fa fa-plus"></i> {{__('messages.New Product')}}</a>
+                            <a href="#" class="btn btn-primary disabled"><i class="fa fa-plus"></i> {{__('messages.New Product')}}</a>
                             @endif
                         </div>
                     </div>
@@ -59,7 +59,7 @@
             @include('flash::message')
             @if(count($products))
                 <div class="table-responsive">
-                    <table class="table table-bordered table-hover">
+                    <table class="table table-bordered table-hover" id="table1">
                         <thead>
                         <tr class="bg-info">
                             <th class="text-center">#</th>
@@ -82,7 +82,7 @@
                                 <td class="text-center">{{$product->name}}</td>
                                 <td class="text-center">{!! $product->description !!}</td>
                                 <td class="text-center">{{$product->category->name}}</td>
-                                <td class="text-center"><img src="{{ $product->image_path }}" style="height:100px;width: 30%" class="img-thumbnail"></td>
+                                <td class="text-center"><img src="{{ $product->image_path }}" style="height:100px" class="img-thumbnail"></td>
                                 <td class="text-center">{{$product->purchase_price}}</td>
                                 <td class="text-center">{{$product->sale_price}}</td>
                                 <td class="text-center">{{$product->profit_percent}} %</td>

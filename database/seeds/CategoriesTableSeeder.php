@@ -11,7 +11,7 @@ class CategoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        $categories=['cat one','cat two','cat three'];
+        $categories=['cat one','cat two','cat three','cat Four','cat five','cat six','cat seven'];
 
         foreach ($categories as $category) {
             \App\Category::create([

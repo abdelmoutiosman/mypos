@@ -11,7 +11,7 @@ class ProductsTableSeeder extends Seeder
      */
     public function run()
     {
-        $products=['pro one','pro two','pro three'];
+        $products=['pro one','pro two','pro three','pro four','pro five','pro six'];
 
         foreach ($products as $product) {
             \App\Product::create([

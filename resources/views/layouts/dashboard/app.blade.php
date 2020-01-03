@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>mypos</title>
+    <title>Pos</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -31,6 +31,9 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
            folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="{{asset('adminlte/css/skins/_all-skins.min.css')}}">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -77,7 +80,7 @@
     </style>
     @stack('css')
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-green sidebar-mini">
 <!-- Site wrapper -->
 <div class="wrapper">
     <header class="main-header">
@@ -85,17 +88,17 @@
         <!-- Logo -->
             <a href="{{url(route('dashboard.welcome'))}}" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini">mypos</span>
+                <span class="logo-mini">pos</span>
                 <!-- logo for regular state and mobile devices -->
-                <span class="logo-lg">mypos</span>
+                <span class="logo-lg">pos</span>
             </a>
     @else
         <!-- Logo -->
             <a href="{{url(route('dashboard.welcome'))}}" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini"><b>my</b>pos</span>
+                <span class="logo-mini"><b>P</b>os</span>
                 <!-- logo for regular state and mobile devices -->
-                <span class="logo-lg"><b>my</b>pos</span>
+                <span class="logo-lg"><b>P</b>os</span>
             </a>
     @endif
     <!-- Header Navbar: style can be found in header.less -->
@@ -186,13 +189,13 @@
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
-                            <li class="user-header">
-                                <img src="{{asset('adminlte/img/user2-160x160.jpg')}}" class="img-circle" alt="User Image">
-                                <p>
-                                    {{auth()->user()->first_name}} {{auth()->user()->last_name}}
+{{--                            <li class="user-header">--}}
+{{--                                <img src="{{asset('adminlte/img/user2-160x160.jpg')}}" class="img-circle" alt="User Image">--}}
+{{--                                <p>--}}
+{{--                                    {{auth()->user()->first_name}} {{auth()->user()->last_name}}--}}
 {{--                                  <small>Member since Nov. 2012</small>--}}
-                                </p>
-                            </li>
+{{--                                </p>--}}
+{{--                            </li>--}}
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="text-center">
@@ -206,9 +209,12 @@
                                         {!! Form::open(['method' => 'post', 'url' => url('logout'),'id'=>'signoutForm']) !!}
                                         {!! Form::close() !!}
                                     </form>
-                                    <a href="#" onclick="submitSignout()">
-                                        <i class="fa fa-sign-out"></i>  {{__('messages.Sign Out')}}
-                                    </a>
+                                    <div class="form-group">
+                                        <a href="{{url('dashboard/users/edit-profile',auth()->user()->id)}}"><i class="fa fa-user"></i> {{__('messages.Profile')}}</a>
+                                    </div>
+                                    <div class="form-group">
+                                        <a href="#" onclick="submitSignout()"><i class="fa fa-sign-out"></i> {{__('messages.Sign Out')}}</a>
+                                    </div>
                                 </div>
                             </li>
                         </ul>
@@ -229,7 +235,8 @@
                         <img src="{{asset('adminlte/img/user2-160x160.jpg')}}" class="img-circle" alt="User Image">
                     </div>
                     <div class="pull-right info">
-                        {{auth()->user()->first_name}} {{auth()->user()->last_name}}
+                       <p>{{auth()->user()->first_name}} {{auth()->user()->last_name}}</p>
+                        <a href=""><i class="fa fa-circle text-success"></i> Online</a>
                     </div>
                 </div>
                 @else
@@ -238,7 +245,8 @@
                         <img src="{{asset('adminlte/img/user2-160x160.jpg')}}" class="img-circle" alt="User Image">
                     </div>
                     <div class="pull-left info">
-                        {{auth()->user()->first_name}} {{auth()->user()->last_name}}
+                        <p>{{auth()->user()->first_name}} {{auth()->user()->last_name}}</p>
+                        <a href=""><i class="fa fa-circle text-success"></i> Online</a>
                     </div>
                 </div>
                 @endif
@@ -260,6 +268,9 @@
                 @endif
                 @if(auth()->user()->hasPermission('read_users'))
                     <li><a href="{{url(route('dashboard.users.index'))}}"><i class="fa fa-users"></i> <span>{{__('messages.users')}}</span></a></li>
+                @endif
+                @if(auth()->user()->hasPermission('update_settings'))
+                    <li><a href="{{url(route('dashboard.settings.index'))}}"><i class="fa fa-cogs"></i> <span>{{__('messages.settings')}}</span></a></li>
                 @endif
                 <li><a href="{{url('dashboard/users/change-password')}}"><i class="fa fa-key"></i> <span>{{__('messages.Change Password')}}</span></a></li>
             </ul>
@@ -491,11 +502,25 @@
 <script src="{{asset('js/confirm.js')}}"></script>
 <script src="{{asset('adminlte/js/custom/order.js')}}"></script>
 <script src="{{asset('adminlte/js/custom/image_preview.js')}}"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+
 <script>
     $(document).ready(function () {
         $('.sidebar-menu').tree()
     })
-
+    $(document).ready( function () {
+        $('#table1').DataTable(
+            {
+                searching: false,
+                paging: false,
+                //scrollY: 200
+                //deferRender: true
+                //"info": true
+                //"ordering": false
+                //"processing": true
+            }
+        );
+    } );
     CKEDITOR.config.language = "{{app()->getLocale()}}";
 </script>
 @stack('scripts')

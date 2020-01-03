@@ -7,7 +7,6 @@
             <th>@lang('messages.price')</th>
         </tr>
         </thead>
-
         <tbody>
         @foreach ($products as $product)
             <tr>

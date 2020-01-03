@@ -4,32 +4,25 @@ namespace App\Http\Controllers\Dashboard;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Order;
+use App\Setting;
 
-class OrderController extends Controller
+class SettingController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['permission:read_orders'])->only('index');
-        $this->middleware(['permission:delete_orders'])->only('destroy');
+        $this->middleware(['permission:update_settings'])->only('index');
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Setting $model)
     {
-        $orders=Order::whereHas('client',function ($query) use($request){
-            return $query->when($request->search, function ($q) use ($request){
-                return $q->where('name','like','%'.$request->search.'%');
-            });
-        })->paginate(3);
-        return view('dashboard.orders.index',compact('orders'));
-    }
-    public function products(Order $order){
-        $products=$order->products;
-        return view('dashboard.orders.products',compact('products','order'));
+        if ($model->all()->count() > 0) {
+            $model = Setting::find(1);
+        }
+        return view('dashboard.settings.index', compact('model'));
     }
 
     /**
@@ -84,7 +77,11 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $record=Setting::findOrFail($id);
+        $record->update($request->all());
+        flash()->success(__('messages.Edited Successfuly'));
+        return redirect(route('dashboard.settings.index'));
+
     }
 
     /**
@@ -95,23 +92,6 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
-        $order = Order::find($id);
-        if (!$order) {
-            return response()->json([
-                'status'  => 0,
-                'message' => 'تعذر الحصول على البيانات'
-            ]);
-        }
-        foreach ($order->products as $product){
-            $product->update([
-                'stock'=>$product->stock + $product->pivot->quantity
-            ]);
-        }
-        $order->delete();
-        return response()->json([
-            'status'  => 1,
-            'message' => 'تم الحذف بنجاح',
-            'id'      => $id
-        ]);
+        //
     }
 }

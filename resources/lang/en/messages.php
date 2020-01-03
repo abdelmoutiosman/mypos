@@ -133,6 +133,16 @@
         "add_order"=>"add_order",
         "All rights reserved."=>"All rights reserved.",
         "Copyright"=>"Copyright",
+        "Edit Settings"=>"Edit Settings",
+        "settings"=>"settings",
+        "about_app"=>"about_app",
+        "Facebook_url"=>"Facebook_url",
+        "Twitter_url"=>"Twitter_url",
+        "instagram_url"=>"instagram_url",
+        "Edit Profile"=>"Edit Profile",
+        "Form To Edit Profile"=>"Form To Edit Profile",
+        "Profile"=>"Profile",
+
 //        "ar"=>[
 //            'name'=>'name'
 //        ],

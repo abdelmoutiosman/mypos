@@ -11,13 +11,13 @@ class ClientsTableSeeder extends Seeder
      */
     public function run()
     {
-        $clients=['abdo','ahmed'];
+        $clients=['abdo','ahmed','mohamed','ali','sayed'];
 
         foreach ($clients as $client) {
             \App\Client::create([
                 'name'=>$client,
-                'phone'=>'522352335',
-                'address'=>'harm',
+                'phone'=>'52235233544',
+                'address'=>'mansoura',
             ]);
         }
     }

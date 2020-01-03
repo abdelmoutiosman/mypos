@@ -101,7 +101,7 @@
                 <label for="permissions">{{__('messages.Permissions')}}</label>
                 <div class="nav-tabs-custom">
                     @php
-                        $models = ['users', 'categories', 'products','clients','orders'];
+                        $models = ['users', 'categories', 'products','clients','orders','settings'];
                         $maps = ['create', 'read', 'update', 'delete'];
                     @endphp
                     <ul class="nav nav-tabs">

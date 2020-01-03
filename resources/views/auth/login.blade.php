@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>MyPos | Login</title>
+    <title>Pos | Login</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -26,10 +26,10 @@
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition login-page">
+<body class="hold-transition login-page" style="background-image: url({{asset('adminlte/img/dash.jpg')}})">
 <div class="login-box">
     <div class="login-logo">
-        <a href="{{ url('/') }}"><b>My</b>Pos</a>
+        <a href="{{ url('/') }}" style="color: white"><b>P</b>os | Login</a>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
@@ -48,7 +48,6 @@
                 <div class="col-md-6 offset-md-4">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
                         <label class="form-check-label" for="remember">
                             {{ __('Remember Me') }}
                         </label>
@@ -56,15 +55,13 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-8">
+                <div class="col-xs-6">
                     @if (Route::has('password.request'))
-                        <a class="btn btn-link" href="{{ route('password.request') }}">
-                            {{ __('Forgot Your Password?') }}
-                        </a>
+                        <a href="{{ route('password.request') }}">{{ __('Forgot Your Password?') }}</a>
                     @endif
                 </div>
                 <!-- /.col -->
-                <div class="col-xs-4">
+                <div class="col-xs-6">
                     <button type="submit" class="btn btn-primary btn-block btn-flat">{{ __('Login') }}</button>
                 </div>
                 <!-- /.col -->

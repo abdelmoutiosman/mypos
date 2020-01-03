@@ -70,7 +70,7 @@
                     'method'=>'POST'
                 ])!!}
                 @include('flash::message')
-                @include('partials.validation_errors')              
+                @include('partials.validation_errors')
                     <label>{{__('messages.Password')}}</label>
                     <div class="form-group">
                         <input class="password1 form-control" type="password" name="old-password"/>
@@ -88,7 +88,7 @@
                     </div>
                 <!-- /.box -->
                 <div class="box-footer">
-                    <button type="submit" class="btn btn-primary">{{__('messages.Save')}}</button>
+                    <button type="submit" class="btn btn-success"><i class="fa fa-edit"></i> {{__('messages.Edit')}}</button>
                 </div>
                 {!! Form::close()!!}
             </div>

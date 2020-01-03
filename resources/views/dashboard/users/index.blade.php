@@ -38,9 +38,9 @@
                         <div class="form-group">
                             <button type="submit" class="btn btn-flat bg-navy"><i class="fa fa-search"></i></button>
                             @if(auth()->user()->hasPermission('create_users'))
-                            <a href="{{url(route('dashboard.users.create'))}}" class="btn btn-flat bg-navy"><i class="fa fa-plus"></i> {{__('messages.New user')}}</a>
+                            <a href="{{url(route('dashboard.users.create'))}}" class="btn btn-primary"><i class="fa fa-plus"></i> {{__('messages.New user')}}</a>
                             @else
-                            <a href="#" class="btn btn-flat bg-navy disabled"><i class="fa fa-plus"></i> {{__('messages.New user')}}</a>
+                            <a href="#" class="btn btn-primary disabled"><i class="fa fa-plus"></i> {{__('messages.New user')}}</a>
                             @endif
                         </div>
                     </div>
@@ -50,7 +50,7 @@
             @include('flash::message')
             @if(count($users))
                 <div class="table-responsive">
-                    <table class="table table-bordered table-hover">
+                    <table class="table table-bordered table-hover" id="table1">
                         <thead>
                         <tr class="bg-info">
                             <th class="text-center">#</th>

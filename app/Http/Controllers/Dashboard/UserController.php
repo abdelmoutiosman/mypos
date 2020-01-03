@@ -156,6 +156,34 @@ class UserController extends Controller
             'id'      => $id
         ]);
     }
+    public function edit_profile($id)
+    {
+        $model= User::findOrFail($id);
+        return view('dashboard.users.profile',compact('model'));
+    }
+    public function update_profile(Request $request,$id)
+    {
+        $this->validate($request,[
+            'first_name'=>'required|unique:users,first_name,'.$id,
+            'last_name'=>'required',
+            'email'=>'required',
+            'image'=>'image',
+        ]);
+        $user=User::findOrFail($id);
+        $user->update($request->except('image'));
+        if($request->image){
+            if ($user->image != 'default.png'){
+                Storage::disk('public_uploads')->delete('/user_images/' . $user->image);
+            }
+            Image::make($request->image)->resize(300, null, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save(public_path('uploads/user_images/' . $request->image->hashName()),60);
+            $user->image = $request->image->hashName();
+        }
+        $user->save();
+        flash()->success(__('messages.Edited Successfuly'));
+        return redirect(route('dashboard.users.index'));
+    }
     public function changePassword()
     {
         return view('dashboard.users.reset-password');
